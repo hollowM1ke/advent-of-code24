@@ -2,13 +2,13 @@ import java.util.ArrayList;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
+import java.util.Collections;
 
 public class Hysteria {
     public static void main(String[] args) {
         ArrayList<ArrayList<Integer>> input = readFile();
         ArrayList<Integer> list1 = input.get(0);
         ArrayList<Integer> list2 = input.get(1);
-        
         System.out.println(totalDistance(list1, list2));
    }
 
@@ -20,43 +20,20 @@ public class Hysteria {
     * @return distance between list1 and list2 
     */ 
     public static int totalDistance (ArrayList<Integer> list1, ArrayList<Integer> list2) {
-        // distance sum
-        int sum = 0; 
-        
-        // loop until lists are empty
-        while (!list1.isEmpty()) {
-           
-            // get the smallest id from both lists
-            int min1 = min(list1);
-            int min2 = min(list2);
+        // sort the lists
+        Collections.sort(list1);
+        Collections.sort(list2);
 
-            // remove the id's from both lists
-            list1.remove(Integer.valueOf(min1));
-            list2.remove(Integer.valueOf(min2));
-
-            // calculate the distance
-            int distance = Math.abs(min1 - min2);
-            sum += distance; 
+        int size = Math.min(list1.size(), list2.size());
+        int sum = 0;    
+        // loop through both lists and calculate the distance
+        for (int i = 0; i < size; i++){
+            sum += Math.abs(list1.get(i) - list2.get(i));
         }
         return sum;
-    }
-   
-    /**
-     * finds the smallest element in a given list  
-     * @param list
-     * @return smallest element
-     */
-    public static int min (ArrayList<Integer> list) {
-        int min = list.get(0);
-        for (int i = 1; i < list.size(); i++) {
-            if (min > list.get(i)) {
-                min = list.get(i);
-            }
-        }
-        return min;
    }
-
-
+   
+   
    /**
     * reads the input file
     * @return an ArrayList containing the data from the file
@@ -66,7 +43,7 @@ public class Hysteria {
        ArrayList<Integer> list1= new ArrayList<Integer>();
        ArrayList<Integer> list2= new ArrayList<Integer>();
        try {
-            File file = new File("day-1/input.txt");
+            File file = new File("./input.txt");
             Scanner scanner = new Scanner(file);
             
             while (scanner.hasNextLine()) {
